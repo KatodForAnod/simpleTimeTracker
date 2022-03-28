@@ -3,4 +3,4 @@
 Main tasks:
 1. authorization/registration system
 2. storage system by db/systemFiles
-3. infographics about days, weeks, months
+3. infographics by days, weeks, months
