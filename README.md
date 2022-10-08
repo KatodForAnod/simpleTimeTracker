@@ -7,6 +7,4 @@ Main tasks:
 ##Tmpl of view:
 
 ![Image text](https://github.com/KatodForAnod/simpleTimeTracker/blob/main/tmpls/main_page.jpg)
-
-
 ![Image text](https://github.com/KatodForAnod/simpleTimeTracker/blob/main/tmpls/view_tasks_page.jpg)
