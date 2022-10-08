@@ -1,6 +1,7 @@
 # simpleTimeTracker
 ## TimeTracker by using golang and fyne for android, macOS, windows
 Main tasks:
-1. authorization/registration system
+1. export data to diff types like (.xls)
 2. storage system by db/systemFiles
-3. infographics by days, weeks, months
+
+##Tmpl of view:
