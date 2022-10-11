@@ -1,6 +1,8 @@
 package controller
 
-import "pkg/models"
+import (
+	"simpleTimeTracker/pkg/models"
+)
 
 type App interface {
 	StartTask(name string) error

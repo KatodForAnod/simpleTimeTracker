@@ -1,6 +1,8 @@
 package db
 
-import "pkg/models"
+import (
+	"simpleTimeTracker/pkg/models"
+)
 
 type Db interface {
 	SaveTask(task models.Task) (int64, error)

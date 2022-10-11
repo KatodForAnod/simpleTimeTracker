@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"pkg/db"
-	"pkg/models"
+	"simpleTimeTracker/pkg/db"
+	"simpleTimeTracker/pkg/models"
 	"time"
 )
 
