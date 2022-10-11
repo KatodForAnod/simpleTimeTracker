@@ -12,6 +12,10 @@ type Controller struct {
 	db       db.Db
 }
 
+func InitController(db db.Db) Controller {
+	return Controller{db: db}
+}
+
 func (c *Controller) StartTask(name string) error {
 	if c.currTask != nil {
 		return fmt.Errorf("stop the previus task: %s", c.currTask.Name)
