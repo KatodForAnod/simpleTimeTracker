@@ -12,6 +12,8 @@ type typeDB string
 const (
 	SQLiteDB   typeDB = "sqlite"
 	SysFilesDB typeDB = "sysFiles"
+
+	BackendVersion = "1.0.0"
 )
 
 func InitApp(db typeDB) (controller.App, error) {
