@@ -6,6 +6,7 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 	"os"
+	"path"
 )
 
 type SqlLite struct {
@@ -13,12 +14,16 @@ type SqlLite struct {
 }
 
 func (l *SqlLite) InitDataBase() error {
-	path := "db.sqlite"
+	dbPath, err := getDBPath()
+	if err != nil {
+		log.Println(err)
+		return err
+	}
 
-	if _, err := os.Stat(path); err == nil {
+	if _, err := os.Stat(dbPath); err == nil {
 		// path/to/whatever exists
 	} else if errors.Is(err, os.ErrNotExist) {
-		_, err = os.Create(path)
+		_, err = os.Create(dbPath)
 		if err != nil {
 			log.Fatalln(err)
 			return err
@@ -27,11 +32,32 @@ func (l *SqlLite) InitDataBase() error {
 		panic("error!")
 	}
 
-	db, err := sql.Open("sqlite3", path)
+	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		panic(err)
 	}
 
 	l.conn = db
 	return nil
+}
+
+func getDBPath() (string, error) {
+	dbBaseDir := "simpleTimeTracker"
+	dbName := "db.sqlite"
+
+	osDir, err := os.UserCacheDir()
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+
+	mkdirPath := path.Join(osDir, dbBaseDir)
+	err = os.MkdirAll(mkdirPath, os.ModePerm)
+	if err != nil {
+		log.Println(err)
+		return "", err
+	}
+
+	absolutePath := path.Join(mkdirPath, dbName)
+	return absolutePath, nil
 }
