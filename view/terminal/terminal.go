@@ -130,6 +130,7 @@ func (v *View) createLastTasksBlock() (*tview.List, error) {
 
 func (v *View) createTaskTimerPage(exitFunc func()) (*tview.Modal, error) {
 	timer := tview.NewModal().
+		SetText("Processing").
 		AddButtons([]string{"Finish task"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			if buttonLabel == "Finish task" {
