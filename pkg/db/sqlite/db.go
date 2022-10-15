@@ -41,6 +41,14 @@ func (l *SqlLite) InitDataBase() error {
 	return nil
 }
 
+func (l *SqlLite) ShutDown() error {
+	if err := l.conn.Close(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
+}
+
 func getDBPath() (string, error) {
 	dbBaseDir := "simpleTimeTracker"
 	dbName := "db.sqlite"
