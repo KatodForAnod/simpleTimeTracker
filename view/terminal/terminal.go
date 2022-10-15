@@ -8,27 +8,6 @@ import (
 	"time"
 )
 
-const refreshInterval = 500 * time.Millisecond
-
-func currentTimeString() string {
-	t := time.Now()
-	return fmt.Sprintf(t.Format("Current time is 15:04:05"))
-}
-
-func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
-	tick := time.NewTicker(refreshInterval)
-	for {
-		select {
-		case <-exit:
-			return
-		case <-tick.C:
-			v.app.QueueUpdateDraw(func() {
-				timerBlock.SetText(currentTimeString())
-			})
-		}
-	}
-}
-
 type View struct {
 	app *tview.Application
 }
@@ -61,6 +40,27 @@ func (v View) Start() error {
 		return err
 	}
 	return nil
+}
+
+const refreshInterval = 500 * time.Millisecond
+
+func currentTimeString() string {
+	t := time.Now()
+	return fmt.Sprintf(t.Format("Current time is 15:04:05"))
+}
+
+func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
+	tick := time.NewTicker(refreshInterval)
+	for {
+		select {
+		case <-exit:
+			return
+		case <-tick.C:
+			v.app.QueueUpdateDraw(func() {
+				timerBlock.SetText(currentTimeString())
+			})
+		}
+	}
 }
 
 func (v *View) createMainPage() (*tview.Flex, error) {
