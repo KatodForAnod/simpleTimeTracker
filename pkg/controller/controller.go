@@ -2,6 +2,7 @@ package controller
 
 import (
 	"fmt"
+	"log"
 	"simpleTimeTracker/pkg/db"
 	"simpleTimeTracker/pkg/models"
 	"time"
@@ -14,6 +15,14 @@ type Controller struct {
 
 func InitController(db db.Db) Controller {
 	return Controller{db: db}
+}
+
+func (c *Controller) ShutDown() error {
+	if err := c.db.ShutDown(); err != nil {
+		log.Println(err)
+		return err
+	}
+	return nil
 }
 
 func (c *Controller) StartTask(name string) error {

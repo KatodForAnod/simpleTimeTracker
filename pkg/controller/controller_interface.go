@@ -10,4 +10,5 @@ type App interface {
 
 	SelectTask(id int64) (models.Task, error)
 	SearchTasks(params models.ReqTaskParams) ([]models.Task, error)
+	ShutDown() error
 }
