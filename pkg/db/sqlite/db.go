@@ -16,7 +16,7 @@ type SqlLite struct {
 func (l *SqlLite) InitDataBase() error {
 	dbPath, err := getDBPath()
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return err
 	}
 
@@ -34,7 +34,7 @@ func (l *SqlLite) InitDataBase() error {
 
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 
 	l.conn = db
@@ -47,14 +47,14 @@ func getDBPath() (string, error) {
 
 	osDir, err := os.UserCacheDir()
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return "", err
 	}
 
 	mkdirPath := path.Join(osDir, dbBaseDir)
 	err = os.MkdirAll(mkdirPath, os.ModePerm)
 	if err != nil {
-		log.Println(err)
+		log.Fatalln(err)
 		return "", err
 	}
 

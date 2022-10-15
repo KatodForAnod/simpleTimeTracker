@@ -1,5 +1,7 @@
 package sqlite
 
+import "log"
+
 const testTable = `CREATE TABLE if not exists notes(
   id INTEGER PRIMARY KEY AUTOINCREMENT, 
   name TEXT not null,
@@ -9,7 +11,7 @@ const testTable = `CREATE TABLE if not exists notes(
 func (l *SqlLite) CreateTables() error {
 	_, err := l.conn.Exec(testTable)
 	if err != nil {
-		panic(err)
+		log.Fatalln(err)
 	}
 	return nil
 }
