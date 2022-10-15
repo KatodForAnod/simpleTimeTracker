@@ -94,6 +94,9 @@ func (v *View) createMenuBarBlock() (*tview.Form, error) {
 		log.Fatalln("u pressed main button")
 	})
 	menuBar.AddButton("Настройки", nil)
+	menuBar.AddButton("Выход", func() {
+		v.app.Stop()
+	})
 	menuBar.SetTitle("Top " + HotKeysNamed[PagesHotKeys[MenuBar]]).SetBorder(true)
 	return menuBar, nil
 }
