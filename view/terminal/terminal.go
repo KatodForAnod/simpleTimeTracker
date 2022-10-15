@@ -44,20 +44,19 @@ func (v View) Start() error {
 
 const refreshInterval = 500 * time.Millisecond
 
-func currentTimeString() string {
-	t := time.Now()
-	return fmt.Sprintf(t.Format("Current time is 15:04:05"))
-}
-
 func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
 	tick := time.NewTicker(refreshInterval)
+	timePast := time.Now()
 	for {
 		select {
 		case <-exit:
 			return
 		case <-tick.C:
 			v.app.QueueUpdateDraw(func() {
-				timerBlock.SetText(currentTimeString())
+				diff := time.Now().Sub(timePast)
+				past := time.Time{}.Add(diff)
+				str := fmt.Sprintf(past.Format(timerBlock.GetTitle() + "\nTime past - 15:04:05"))
+				timerBlock.SetText(str)
 			})
 		}
 	}
@@ -103,14 +102,15 @@ func (v *View) createMenuBarBlock() (*tview.Form, error) {
 
 func (v *View) createTaskStarterBlock() (*tview.Form, error) {
 	taskStarter := tview.NewForm()
-	inputField := tview.NewInputField().SetLabel("Task:").SetFieldWidth(20)
-	taskStarter.AddFormItem(inputField)
+	inputTaskField := tview.NewInputField().SetLabel("Task:").SetFieldWidth(20)
+	taskStarter.AddFormItem(inputTaskField)
 	taskStarter.AddButton("Start", func() {
 		exitCh := make(chan struct{})
 		exitFunc := func() {
 			exitCh <- struct{}{}
 		}
 		timer, _ := v.createTaskTimerPage(exitFunc)
+		timer.SetTitle(inputTaskField.GetText())
 		go v.updateTime(timer, exitCh)
 		v.app.SetInputCapture(nil)
 		v.app.SetRoot(timer, true)
@@ -130,7 +130,6 @@ func (v *View) createLastTasksBlock() (*tview.List, error) {
 
 func (v *View) createTaskTimerPage(exitFunc func()) (*tview.Modal, error) {
 	timer := tview.NewModal().
-		SetText(currentTimeString()).
 		AddButtons([]string{"Finish task"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			if buttonLabel == "Finish task" {
