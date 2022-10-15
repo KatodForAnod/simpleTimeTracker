@@ -18,6 +18,12 @@ func InitController(db db.Db) Controller {
 }
 
 func (c *Controller) ShutDown() error {
+	if c.currTask != nil {
+		if _, err := c.StopTask(); err != nil {
+			log.Println(err)
+		}
+	}
+
 	if err := c.db.ShutDown(); err != nil {
 		log.Println(err)
 		return err
