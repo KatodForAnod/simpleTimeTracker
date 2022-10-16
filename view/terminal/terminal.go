@@ -18,6 +18,7 @@ const (
 	MenuBar     PageName = 1
 	TickerBlock PageName = 2
 	LastTask    PageName = 3
+	SearchBlock PageName = 4
 )
 
 var (
@@ -25,17 +26,56 @@ var (
 		MenuBar:     tcell.KeyCtrlA,
 		TickerBlock: tcell.KeyCtrlS,
 		LastTask:    tcell.KeyCtrlB,
+		SearchBlock: tcell.KeyCtrlH,
 	}
 	HotKeysNamed = map[tcell.Key]string{
 		tcell.KeyCtrlA: "Ctrl-a",
 		tcell.KeyCtrlS: "Ctrl-s",
 		tcell.KeyCtrlB: "Ctrl-b",
+		tcell.KeyCtrlH: "Ctrl-h",
 	}
 )
 
 func (v View) Start() error {
 	v.app = tview.NewApplication()
 	mainPage, _ := v.createMainPage()
+
+	/*dropdown := tview.NewDropDown().
+		SetLabel("Duration: ").
+		SetOptions([]string{"First", "Second", "Third", "Fourth", "Fifth"}, nil)
+	f := tview.NewForm()
+	f.AddInputField("Task:", "", 20, nil, nil)
+	f.AddFormItem(dropdown)
+	//f.SetHorizontal(true)
+	f.SetBorder(true)
+	f.SetTitle("Search " + HotKeysNamed[PagesHotKeys[SearchBlock]]).SetBorder(true)
+	f.SetItemPadding(0)
+	f.SetBorderPadding(0, 0, 0, 0)
+
+	table := tview.NewTable()
+	table.SetBorder(true)
+	table.SetCell(0, 0, &tview.TableCell{Text: "name1", Align: tview.AlignCenter, Color: tcell.ColorYellow})
+	table.SetCell(0, 1, &tview.TableCell{Text: "name2", Align: tview.AlignCenter, Color: tcell.ColorYellow})
+	table.SetCell(0, 2, &tview.TableCell{Text: "name3", Align: tview.AlignCenter, Color: tcell.ColorYellow})
+	table.SetCellSimple(1, 0, "1")
+	table.SetCellSimple(1, 1, "2")
+	table.SetCellSimple(1, 2, "3")
+	table.SetBorders(true)
+	table.SetBordersColor(tcell.ColorGreen)
+
+	flex := tview.NewFlex().
+		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
+			AddItem(f, 4, 1, true).
+			AddItem(table, 0, 3, false), 0, 2, false)
+
+	v.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case PagesHotKeys[SearchBlock]:
+			v.app.SetFocus(f)
+		}
+		return event
+	})*/
+
 	if err := v.app.SetRoot(mainPage, true).Run(); err != nil {
 		return err
 	}
@@ -124,6 +164,10 @@ func (v *View) createLastTasksBlock() (*tview.List, error) {
 	lastTasks := tview.NewList()
 	lastTasks.AddItem("Task 1", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'a', nil)
 	lastTasks.AddItem("Task 2", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 3", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 4", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 5", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("More", "Load more ↓", 'b', nil)
 	lastTasks.SetTitle("Bottom " + HotKeysNamed[PagesHotKeys[LastTask]]).SetBorder(true)
 	return lastTasks, nil
 }
