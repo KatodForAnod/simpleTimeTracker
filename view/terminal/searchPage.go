@@ -23,7 +23,7 @@ func (p *searchPage) createSearchPage(mainPage *tview.Application) (*tview.Flex,
 		{Name: "task5"}, {Name: "task6"}}
 
 	p.tasksBlock = tview.NewList()
-	p.tasksBlock.SetTitle("Result " + HotKeysNamed[PagesHotKeys[SearchBlockTasks]]).SetBorder(true)
+	p.tasksBlock.SetTitle("Result " + HotKeysNamed[PagesHotKeys[SearchBlockResults]]).SetBorder(true)
 	p.initSearchBlock()
 
 	p.amountBlock = tview.NewTextView()
@@ -39,9 +39,9 @@ func (p *searchPage) createSearchPage(mainPage *tview.Application) (*tview.Flex,
 
 	mainPage.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
-		case PagesHotKeys[SearchBlock]:
+		case PagesHotKeys[SearchBlockParams]:
 			mainPage.SetFocus(p.searchBlock)
-		case PagesHotKeys[SearchBlockTasks]:
+		case PagesHotKeys[SearchBlockResults]:
 			mainPage.SetFocus(p.tasksBlock)
 		}
 		return event
@@ -69,7 +69,7 @@ func (p *searchPage) initSearchBlock() error {
 		})
 	p.searchBlock.AddFormItem(dropdown)
 	p.searchBlock.SetBorder(true)
-	p.searchBlock.SetTitle("Search " + HotKeysNamed[PagesHotKeys[SearchBlock]])
+	p.searchBlock.SetTitle("Search " + HotKeysNamed[PagesHotKeys[SearchBlockParams]])
 	p.searchBlock.SetItemPadding(0)
 	p.searchBlock.SetBorderPadding(0, 0, 0, 0)
 	return nil
