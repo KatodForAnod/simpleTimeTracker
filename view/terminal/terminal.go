@@ -38,45 +38,10 @@ var (
 
 func (v View) Start() error {
 	v.app = tview.NewApplication()
-	mainPage, _ := v.createMainPage()
+	//mainPage, _ := v.createMainPage()
+	searchPage, _ := v.createSearchPage()
 
-	/*dropdown := tview.NewDropDown().
-		SetLabel("Duration: ").
-		SetOptions([]string{"First", "Second", "Third", "Fourth", "Fifth"}, nil)
-	f := tview.NewForm()
-	f.AddInputField("Task:", "", 20, nil, nil)
-	f.AddFormItem(dropdown)
-	//f.SetHorizontal(true)
-	f.SetBorder(true)
-	f.SetTitle("Search " + HotKeysNamed[PagesHotKeys[SearchBlock]]).SetBorder(true)
-	f.SetItemPadding(0)
-	f.SetBorderPadding(0, 0, 0, 0)
-
-	table := tview.NewTable()
-	table.SetBorder(true)
-	table.SetCell(0, 0, &tview.TableCell{Text: "name1", Align: tview.AlignCenter, Color: tcell.ColorYellow})
-	table.SetCell(0, 1, &tview.TableCell{Text: "name2", Align: tview.AlignCenter, Color: tcell.ColorYellow})
-	table.SetCell(0, 2, &tview.TableCell{Text: "name3", Align: tview.AlignCenter, Color: tcell.ColorYellow})
-	table.SetCellSimple(1, 0, "1")
-	table.SetCellSimple(1, 1, "2")
-	table.SetCellSimple(1, 2, "3")
-	table.SetBorders(true)
-	table.SetBordersColor(tcell.ColorGreen)
-
-	flex := tview.NewFlex().
-		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-			AddItem(f, 4, 1, true).
-			AddItem(table, 0, 3, false), 0, 2, false)
-
-	v.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		case PagesHotKeys[SearchBlock]:
-			v.app.SetFocus(f)
-		}
-		return event
-	})*/
-
-	if err := v.app.SetRoot(mainPage, true).Run(); err != nil {
+	if err := v.app.SetRoot(searchPage, true).Run(); err != nil {
 		return err
 	}
 	return nil
@@ -125,6 +90,81 @@ func (v *View) createMainPage() (*tview.Flex, error) {
 		return event
 	})
 	return flex, nil
+}
+
+func (v *View) createSearchPage() (*tview.Flex, error) {
+	searchBlock, _ := v.getSearchBlock(func(taskName string, dur time.Duration) error {
+		return nil
+	})
+	tasks, _ := v.getTasks("", time.Hour*24)
+
+	text := tview.NewTextView()
+	text.SetBorderPadding(0, 0, 1, 1)
+	text.SetText("From - To: 2022-01-01 - 2022-02-02; Amount: 10min")
+	text.SetBorder(true)
+
+	flex := tview.NewFlex().
+		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
+			AddItem(searchBlock, 4, 1, true).
+			AddItem(tasks, 0, 3, false).
+			AddItem(text, 3, 3, false), 0, 2, false)
+
+	v.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case PagesHotKeys[SearchBlock]:
+			v.app.SetFocus(searchBlock)
+		}
+		return event
+	})
+	return flex, nil
+}
+
+func (v *View) getSearchBlock(searchFunc func(taskName string, dur time.Duration) error) (*tview.Form, error) {
+	f := tview.NewForm()
+	taskName := tview.NewInputField().SetLabel("Task:").SetFieldWidth(20)
+	f.AddFormItem(taskName)
+
+	dropdown := tview.NewDropDown().
+		SetLabel("Duration: ").
+		SetOptions([]string{"Day", "Week", "Month"}, func(text string, index int) {
+			switch text {
+			case "Day":
+				day := time.Hour * 24
+				if err := searchFunc(taskName.GetText(), day); err != nil {
+					log.Println(err)
+				}
+			case "Week":
+				week := time.Hour * 24 * 7
+				if err := searchFunc(taskName.GetText(), week); err != nil {
+					log.Println(err)
+				}
+			case "Month":
+				month := time.Hour * 24 * 7 * 31
+				if err := searchFunc(taskName.GetText(), month); err != nil {
+					log.Println(err)
+				}
+			default:
+			}
+		})
+	f.AddFormItem(dropdown)
+	f.SetBorder(true)
+	f.SetTitle("Search " + HotKeysNamed[PagesHotKeys[SearchBlock]]).SetBorder(true)
+	f.SetItemPadding(0)
+	f.SetBorderPadding(0, 0, 0, 0)
+	return f, nil
+}
+
+func (v *View) getTasks(taskName string, dur time.Duration) (*tview.List, error) {
+	lastTasks := tview.NewList()
+	lastTasks.AddItem("Back", "Return back ↑", 'b', nil)
+	lastTasks.AddItem("Task 1", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'a', nil)
+	lastTasks.AddItem("Task 2", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 3", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 4", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 5", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("More", "Load more ↓", 'b', nil)
+	lastTasks.SetTitle("Bottom " + HotKeysNamed[PagesHotKeys[LastTask]]).SetBorder(true)
+	return lastTasks, nil
 }
 
 func (v *View) createMenuBarBlock() (*tview.Form, error) {
