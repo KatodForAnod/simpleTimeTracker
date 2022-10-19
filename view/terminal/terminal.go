@@ -28,7 +28,8 @@ func (v *View) Start() error {
 }
 
 func (v *View) ShutDown() error {
-	log.Fatalln("no ready yet")
+	v.controller.StopTask()
+	v.app.Stop()
 	return nil
 }
 

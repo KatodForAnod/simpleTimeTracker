@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
 	"simpleTimeTracker/pkg/controller"
 	"simpleTimeTracker/pkg/db/sqlite"
 	"simpleTimeTracker/view/terminal"
+	"syscall"
 )
 
 func main() {
@@ -26,5 +29,12 @@ func main() {
 	controller := controller.InitController(&lite)
 	view := terminal.View{}
 	view.Init(&controller)
+
+	c := make(chan os.Signal, 1)
+	signal.Notify(c, syscall.SIGTERM, syscall.SIGINT)
+	go func() {
+		<-c
+		view.ShutDown()
+	}()
 	view.Start()
 }
