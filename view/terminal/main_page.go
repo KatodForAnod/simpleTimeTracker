@@ -39,6 +39,7 @@ func (v *mainPage) createTaskStarterBlock() (*tview.Form, error) {
 
 func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
 	lastTasks := tview.NewList()
+	lastTasks.SetSelectedFocusOnly(true)
 	lastTasks.AddItem("Task 1", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'a', nil)
 	lastTasks.AddItem("Task 2", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 3", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
