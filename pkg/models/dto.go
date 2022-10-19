@@ -18,4 +18,6 @@ const (
 
 type ReqTaskParams struct {
 	Start time.Time `json:"start"`
+	Name  string    `json:"name"`
+	Limit int64     `json:"limit"`
 }
