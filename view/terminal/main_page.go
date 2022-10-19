@@ -15,7 +15,7 @@ func (v *mainPage) createMainPage(menuBar *tview.Form, setFocus func(page PageNa
 	flex := tview.NewFlex().
 		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
 			AddItem(menuBar, 5, 1, true).
-			AddItem(taskStarter, 0, 1, false).
+			AddItem(taskStarter, 5, 1, false).
 			AddItem(lastTasks, 0, 3, false), 0, 2, false)
 
 	setFocus(MenuBar, menuBar)
