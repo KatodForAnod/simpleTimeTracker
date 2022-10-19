@@ -13,7 +13,11 @@ type View struct {
 	menuBar *tview.Form
 }
 
-func (v View) Start() error {
+func (v *View) Init(app controller.App) {
+	v.controller = app
+}
+
+func (v *View) Start() error {
 	v.app = tview.NewApplication()
 	main_page, _ := v.createMainPage()
 	if err := v.app.SetRoot(main_page, true).Run(); err != nil {
@@ -24,7 +28,7 @@ func (v View) Start() error {
 
 func (v *View) createMainPage() (*tview.Flex, error) {
 	menuBar, _ := v.createMenuBarBlock()
-	mainPageStruct := mainPage{createTaskTimerPage: v.createTaskTimerPageStart}
+	mainPageStruct := mainPage{createTaskTimerPage: v.createTaskTimerPageStart, controller: v.controller} //controller singleton?
 	mainPageObj, _ := mainPageStruct.createMainPage(menuBar, v.createNewFuncInputCapture())
 	return mainPageObj, nil
 }

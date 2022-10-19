@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/rivo/tview"
 	"log"
-	"simpleTimeTracker/pkg/controller"
 	"time"
 )
 
@@ -26,10 +25,9 @@ func (v *View) createTaskTimerPage(exitFunc func()) (*tview.Modal, error) {
 		AddButtons([]string{"Finish task"}).
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			if buttonLabel == "Finish task" {
-				//v.app.Stop()
 				exitFunc()
-				mainPage, _ := v.createMainPage()
-				v.app.SetRoot(mainPage, true)
+				main_Page, _ := v.createMainPage()
+				v.app.SetRoot(main_Page, true)
 			}
 		})
 	return timer, nil
@@ -44,16 +42,14 @@ func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
 	if err != nil {
 		log.Println(err)
 	}
-	defer func(controller controller.App) {
-		_, err := controller.StopTask()
-		if err != nil {
-			log.Println(err)
-		}
-	}(v.controller)
 
 	for {
 		select {
 		case <-exit:
+			_, err := v.controller.StopTask()
+			if err != nil {
+				log.Println(err)
+			}
 			return
 		case <-tick.C:
 			v.app.QueueUpdateDraw(func() {
