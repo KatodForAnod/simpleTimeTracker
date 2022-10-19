@@ -2,14 +2,13 @@ package terminal
 
 import (
 	"github.com/rivo/tview"
-	"log"
 )
 
 type mainPage struct {
 	createTaskTimerPage func(taskName string)
 }
 
-func (v *mainPage) createMainPage(menuBar *tview.Form, setFocus func(page PageName) error) (*tview.Flex, error) {
+func (v *mainPage) createMainPage(menuBar *tview.Form, setFocus func(page PageName, primitive tview.Primitive)) (*tview.Flex, error) {
 	taskStarter, _ := v.createTaskStarterBlock()
 	lastTasks, _ := v.createLastTasksBlock()
 
@@ -19,15 +18,9 @@ func (v *mainPage) createMainPage(menuBar *tview.Form, setFocus func(page PageNa
 			AddItem(taskStarter, 0, 1, false).
 			AddItem(lastTasks, 0, 3, false), 0, 2, false)
 
-	if err := setFocus(MenuBar); err != nil {
-		log.Println(err)
-	}
-	if err := setFocus(TickerBlock); err != nil {
-		log.Println(err)
-	}
-	if err := setFocus(LastTasks); err != nil {
-		log.Println(err)
-	}
+	setFocus(MenuBar, menuBar)
+	setFocus(TickerBlock, taskStarter)
+	setFocus(LastTasks, lastTasks)
 
 	return flex, nil
 }
