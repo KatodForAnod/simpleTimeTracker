@@ -26,13 +26,13 @@ func (l *SqlLite) SaveTask(task models.Task) (int64, error) {
 }
 
 const searchTaskQuery = `
-	SELECT (id, name, start, end)
+	SELECT id, name, start, end
 	FROM notes WHERE start >= $1
-	ORDER BY start
+	ORDER BY start LIMIT $2
 `
 
 func (l *SqlLite) SearchTasks(params models.ReqTaskParams) ([]models.Task, error) {
-	rows, err := l.conn.Query(searchTaskQuery, params.Start)
+	rows, err := l.conn.Query(searchTaskQuery, params.Start, params.Limit)
 	if err != nil {
 		log.Println(err)
 		return []models.Task{}, err
@@ -41,18 +41,19 @@ func (l *SqlLite) SearchTasks(params models.ReqTaskParams) ([]models.Task, error
 	var tasks []models.Task
 	for rows.Next() {
 		var task models.Task
-		err := rows.Scan(task.Id, task.Name, task.Start, task.End)
+		err := rows.Scan(&task.Id, &task.Name, &task.Start, &task.End)
 		if err != nil {
 			log.Println(err)
 			continue
 		}
+		tasks = append(tasks, task)
 	}
 
 	return tasks, nil
 }
 
 const selectTaskQuery = `
-	SELECT (id, name, start, end)
+	SELECT id, name, start, end
 	FROM notes 
 	WHERE id = $1
 `
@@ -66,7 +67,7 @@ func (l *SqlLite) SelectTask(id int64) (models.Task, error) {
 
 	var task models.Task
 	for rows.Next() {
-		err := rows.Scan(task.Id, task.Name, task.Start, task.End)
+		err := rows.Scan(&task.Id, &task.Name, &task.Start, &task.End)
 		if err != nil {
 			log.Println(err)
 			return models.Task{}, err
