@@ -26,6 +26,10 @@ func (v *View) createTaskTimerPage(exitFunc func()) (*tview.Modal, error) {
 		SetDoneFunc(func(buttonIndex int, buttonLabel string) {
 			if buttonLabel == "Finish task" {
 				exitFunc()
+				_, err := v.controller.StopTask()
+				if err != nil {
+					log.Println(err)
+				}
 				main_Page, _ := v.createMainPage()
 				v.app.SetRoot(main_Page, true)
 			}
@@ -46,10 +50,6 @@ func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
 	for {
 		select {
 		case <-exit:
-			_, err := v.controller.StopTask()
-			if err != nil {
-				log.Println(err)
-			}
 			return
 		case <-tick.C:
 			v.app.QueueUpdateDraw(func() {
