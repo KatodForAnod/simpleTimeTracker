@@ -55,7 +55,7 @@ func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
 			v.app.QueueUpdateDraw(func() {
 				diff := time.Now().Sub(timePast)
 				past := time.Time{}.Add(diff)
-				str := fmt.Sprintf(past.Format(timerBlock.GetTitle() + "\nTime past - 15:04:05"))
+				str := timerBlock.GetTitle() + fmt.Sprintf(past.Format("\nTime past - 15:04:05"))
 				timerBlock.SetText(str)
 			})
 		}
