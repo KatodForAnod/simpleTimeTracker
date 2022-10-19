@@ -27,6 +27,11 @@ func (v *View) Start() error {
 	return nil
 }
 
+func (v *View) ShutDown() error {
+	log.Fatalln("no ready yet")
+	return nil
+}
+
 func (v *View) createMainPage() (*tview.Flex, error) {
 	menuBar, _ := v.createMenuBarBlock()
 	mainPageStruct := mainPage{createTaskTimerPage: v.createTaskTimerPageStart, controller: v.controller} //controller singleton?
