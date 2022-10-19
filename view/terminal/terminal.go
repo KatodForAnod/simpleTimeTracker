@@ -28,7 +28,7 @@ func (v *View) Start() error {
 }
 
 func (v *View) ShutDown() error {
-	v.controller.StopTask()
+	v.controller.StopTask() //add check is task running
 	v.app.Stop()
 	return nil
 }
