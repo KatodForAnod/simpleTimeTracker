@@ -28,7 +28,7 @@ func (l *SqlLite) SaveTask(task models.Task) (int64, error) {
 const searchTaskQuery = `
 	SELECT id, name, start, end
 	FROM notes WHERE start >= $1
-	ORDER BY start LIMIT $2
+	ORDER BY start DESC LIMIT $2
 `
 
 func (l *SqlLite) SearchTasks(params models.ReqTaskParams) ([]models.Task, error) {
