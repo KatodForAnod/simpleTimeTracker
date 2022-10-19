@@ -3,7 +3,6 @@ package terminal
 import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
-	"log"
 )
 
 type View struct {
@@ -61,20 +60,12 @@ func (v *View) createMenuBarBlock() (*tview.Form, error) {
 	v.menuBar = menuBar
 
 	menuBar.AddButton("Главная", func() {
-		v.app.Stop() //fix memory use
-		v.app = tview.NewApplication()
-		main_page, _ := v.createMainPage()
-		if err := v.app.SetRoot(main_page, true).Run(); err != nil {
-			log.Println(err)
-		}
+		main_page, _ := v.createMainPage() //TODO memory use fix
+		v.app.SetRoot(main_page, true)
 	})
 	menuBar.AddButton("Поиск", func() {
-		v.app.Stop() //fix memory use
-		v.app = tview.NewApplication()
-		search_page, _ := v.createSearchPage()
-		if err := v.app.SetRoot(search_page, true).Run(); err != nil {
-			log.Println(err)
-		}
+		search_page, _ := v.createSearchPage() //TODO memory use fix
+		v.app.SetRoot(search_page, true)
 	})
 	menuBar.AddButton("Настройки", nil)
 	menuBar.AddButton("Выход", func() {

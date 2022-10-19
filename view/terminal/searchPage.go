@@ -35,7 +35,7 @@ func (p *searchPage) createSearchPage(menuBar *tview.Form, setFocus func(page Pa
 			AddItem(menuBar, 5, 1, false).
 			AddItem(p.searchBlock, 4, 1, true).
 			AddItem(p.tasksBlock, 0, 3, false).
-			AddItem(p.amountBlock, 3, 3, false), 0, 2, false)
+			AddItem(p.amountBlock, 3, 3, false), 0, 2, true)
 
 	setFocus(SearchBlockParams, p.searchBlock)
 	setFocus(SearchBlockResults, p.tasksBlock)
