@@ -1,5 +1,5 @@
 # simpleTimeTracker
-## TimeTracker by using golang and javascript with React for macOS, windows
+## TimeTracker for macOS, windows
 Main tasks:
 1. export data to diff types like (.xls)
 2. storage system by db/systemFiles
