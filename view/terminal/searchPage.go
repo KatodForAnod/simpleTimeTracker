@@ -23,7 +23,7 @@ func (p *searchPage) createSearchPage(menuBar *tview.Form, setFocus func(page Pa
 
 	p.tasksBlock = tview.NewList()
 	p.tasksBlock.SetTitle("Result " + HotKeysNamed[PagesHotKeys[SearchBlockResults]]).SetBorder(true)
-	p.initSearchBlock()
+	_ = p.initSearchBlock()
 
 	p.amountBlock = tview.NewTextView()
 	p.amountBlock.SetBorderPadding(0, 0, 1, 1)
@@ -32,12 +32,14 @@ func (p *searchPage) createSearchPage(menuBar *tview.Form, setFocus func(page Pa
 
 	flex := tview.NewFlex().
 		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
+			AddItem(menuBar, 5, 1, true).
 			AddItem(p.searchBlock, 4, 1, true).
 			AddItem(p.tasksBlock, 0, 3, false).
 			AddItem(p.amountBlock, 3, 3, false), 0, 2, false)
 
 	setFocus(SearchBlockParams, p.searchBlock)
 	setFocus(SearchBlockResults, p.tasksBlock)
+	setFocus(MenuBar, menuBar)
 	return flex, nil
 }
 
