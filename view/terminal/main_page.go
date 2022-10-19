@@ -33,7 +33,7 @@ func (v *mainPage) createMainPage(menuBar *tview.Form, setFocus func(page PageNa
 
 func (v *mainPage) createTaskStarterBlock() (*tview.Form, error) {
 	taskStarter := tview.NewForm()
-	inputTaskField := tview.NewInputField().SetLabel("Task:").SetFieldWidth(20)
+	inputTaskField := tview.NewInputField().SetLabel("Task:").SetFieldWidth(35)
 	taskStarter.AddFormItem(inputTaskField)
 	taskStarter.AddButton("Start", func() {
 		v.createTaskTimerPage(inputTaskField.GetText())
