@@ -2,7 +2,6 @@ package terminal
 
 import (
 	"fmt"
-	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 	"simpleTimeTracker/pkg/models"
 )
@@ -16,7 +15,7 @@ type searchPage struct {
 	currPage int
 }
 
-func (p *searchPage) createSearchPage(mainPage *tview.Application) (*tview.Flex, error) {
+func (p *searchPage) createSearchPage(menuBar *tview.Form, setFocus func(page PageName, primitive tview.Primitive)) (*tview.Flex, error) {
 	p.tasks = []models.Task{{Name: "task0"},
 		{Name: "task1"}, {Name: "task2"},
 		{Name: "task3"}, {Name: "task4"},
@@ -37,15 +36,8 @@ func (p *searchPage) createSearchPage(mainPage *tview.Application) (*tview.Flex,
 			AddItem(p.tasksBlock, 0, 3, false).
 			AddItem(p.amountBlock, 3, 3, false), 0, 2, false)
 
-	mainPage.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		case PagesHotKeys[SearchBlockParams]:
-			mainPage.SetFocus(p.searchBlock)
-		case PagesHotKeys[SearchBlockResults]:
-			mainPage.SetFocus(p.tasksBlock)
-		}
-		return event
-	})
+	setFocus(SearchBlockParams, p.searchBlock)
+	setFocus(SearchBlockResults, p.tasksBlock)
 	return flex, nil
 }
 
