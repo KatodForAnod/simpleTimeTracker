@@ -32,7 +32,7 @@ func (p *searchPage) createSearchPage(menuBar *tview.Form, setFocus func(page Pa
 
 	flex := tview.NewFlex().
 		AddItem(tview.NewFlex().SetDirection(tview.FlexRow).
-			AddItem(menuBar, 5, 1, true).
+			AddItem(menuBar, 5, 1, false).
 			AddItem(p.searchBlock, 4, 1, true).
 			AddItem(p.tasksBlock, 0, 3, false).
 			AddItem(p.amountBlock, 3, 3, false), 0, 2, false)
