@@ -60,6 +60,12 @@ func (v *View) createMenuBarBlock() (*tview.Form, error) {
 			log.Println(err)
 		}
 	})
+	menuBar.AddButton("Поиск", func() {
+		search_page, _ := v.createSearchPage()
+		if err := v.app.SetRoot(search_page, true).Run(); err != nil {
+			log.Println(err)
+		}
+	})
 	menuBar.AddButton("Настройки", nil)
 	menuBar.AddButton("Выход", func() {
 		v.app.Stop()
