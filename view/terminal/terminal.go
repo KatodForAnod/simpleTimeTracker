@@ -3,9 +3,12 @@ package terminal
 import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
+	"simpleTimeTracker/pkg/controller"
 )
 
 type View struct {
+	controller controller.App
+
 	app     *tview.Application
 	menuBar *tview.Form
 }

@@ -1,10 +1,16 @@
 package terminal
 
 import (
+	"fmt"
 	"github.com/rivo/tview"
+	"log"
+	"simpleTimeTracker/pkg/controller"
+	"simpleTimeTracker/pkg/models"
+	"time"
 )
 
 type mainPage struct {
+	controller          controller.App
 	createTaskTimerPage func(taskName string)
 }
 
@@ -38,15 +44,35 @@ func (v *mainPage) createTaskStarterBlock() (*tview.Form, error) {
 }
 
 func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
+	params := models.ReqTaskParams{
+		Start: time.Time{},
+		Name:  "",
+		Limit: 10,
+	}
+
+	tasks, err := v.controller.SearchTasks(params)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
 	lastTasks := tview.NewList()
 	lastTasks.SetSelectedFocusOnly(true)
-	lastTasks.AddItem("Task 1", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'a', nil)
+
+	for _, task := range tasks {
+		start := task.Start.Format("2006-02-01")
+		end := task.End.Format("2006-02-01")
+		amount := task.End.Sub(task.Start)
+		secondaryText := fmt.Sprintf("Start: %s; End: %s; Amount %s", start, end, amount.String())
+		lastTasks.AddItem(task.Name, secondaryText, 'a', nil)
+	}
+	/*lastTasks.AddItem("Task 1", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'a', nil)
 	lastTasks.AddItem("Task 2", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 3", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 4", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 5", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 6", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("Task 7", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 7", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)*/
 
 	lastTasks.SetTitle("Bottom " + HotKeysNamed[PagesHotKeys[LastTasks]]).SetBorder(true)
 	return lastTasks, nil

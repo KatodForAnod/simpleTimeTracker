@@ -3,6 +3,8 @@ package terminal
 import (
 	"fmt"
 	"github.com/rivo/tview"
+	"log"
+	"simpleTimeTracker/pkg/controller"
 	"time"
 )
 
@@ -38,6 +40,17 @@ const refreshInterval = 500 * time.Millisecond
 func (v *View) updateTime(timerBlock *tview.Modal, exit <-chan struct{}) {
 	tick := time.NewTicker(refreshInterval)
 	timePast := time.Now()
+	err := v.controller.StartTask(timerBlock.GetTitle())
+	if err != nil {
+		log.Println(err)
+	}
+	defer func(controller controller.App) {
+		_, err := controller.StopTask()
+		if err != nil {
+			log.Println(err)
+		}
+	}(v.controller)
+
 	for {
 		select {
 		case <-exit:
