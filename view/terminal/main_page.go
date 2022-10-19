@@ -66,13 +66,6 @@ func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
 		secondaryText := fmt.Sprintf("Start: %s; End: %s; Amount %s", start, end, amount.String())
 		lastTasks.AddItem(task.Name, secondaryText, 'a', nil)
 	}
-	/*lastTasks.AddItem("Task 1", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'a', nil)
-	lastTasks.AddItem("Task 2", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("Task 3", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("Task 4", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("Task 5", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("Task 6", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("Task 7", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)*/
 
 	lastTasks.SetTitle("Bottom " + HotKeysNamed[PagesHotKeys[LastTasks]]).SetBorder(true)
 	return lastTasks, nil
