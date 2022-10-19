@@ -44,7 +44,9 @@ func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
 	lastTasks.AddItem("Task 3", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 4", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
 	lastTasks.AddItem("Task 5", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
-	lastTasks.AddItem("More", "Load more ↓", 'b', nil)
+	lastTasks.AddItem("Task 6", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+	lastTasks.AddItem("Task 7", "Start: 01-01-01; End: 02-02-02; Amount 1h", 'b', nil)
+
 	lastTasks.SetTitle("Bottom " + HotKeysNamed[PagesHotKeys[LastTasks]]).SetBorder(true)
 	return lastTasks, nil
 }
