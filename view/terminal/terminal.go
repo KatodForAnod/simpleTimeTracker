@@ -20,7 +20,14 @@ func (v View) Start() error {
 }
 
 func (v *View) createMainPage() (*tview.Flex, error) {
-	menuBar, _ := v.createMenuBarBlock()
+	menuBar, _ := v.createMenuBarBlock() //fix memory use
+	mainPageStruct := mainPage{createTaskTimerPage: v.createTaskTimerPageStart}
+	mainPageObj, _ := mainPageStruct.createMainPage(menuBar, v.createNewFuncInputCapture())
+	return mainPageObj, nil
+}
+
+func (v *View) createNewFuncInputCapture() func(page PageName, primitive tview.Primitive) {
+	v.app.SetInputCapture(nil) // ??can be a problem
 	focusFunc := func(page PageName, primitive tview.Primitive) {
 		f := v.app.GetInputCapture()
 		v.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
@@ -34,27 +41,24 @@ func (v *View) createMainPage() (*tview.Flex, error) {
 			return event
 		})
 	}
-	mainPageStruct := mainPage{createTaskTimerPage: v.createTaskTimerPageStart}
-	mainPageObj, _ := mainPageStruct.createMainPage(menuBar, focusFunc)
-	return mainPageObj, nil
+
+	return focusFunc
 }
 
-/*func (v View) Start() error {
-	v.app = tview.NewApplication()
-
-	s := searchPage{}
-	flex, _ := s.createSearchPage(v.app)
-
-	if err := v.app.SetRoot(flex, true).Run(); err != nil {
-		return err
-	}
-	return nil
-}*/
+func (v *View) createSearchPage() (*tview.Flex, error) {
+	searchPageObj := searchPage{}
+	menuBar, _ := v.createMenuBarBlock() //fix memory use
+	page, _ := searchPageObj.createSearchPage(menuBar, v.createNewFuncInputCapture())
+	return page, nil
+}
 
 func (v *View) createMenuBarBlock() (*tview.Form, error) {
 	menuBar := tview.NewForm()
 	menuBar.AddButton("Главная", func() {
-		log.Fatalln("u pressed main button")
+		main_page, _ := v.createMainPage()
+		if err := v.app.SetRoot(main_page, true).Run(); err != nil {
+			log.Println(err)
+		}
 	})
 	menuBar.AddButton("Настройки", nil)
 	menuBar.AddButton("Выход", func() {
