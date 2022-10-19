@@ -3,6 +3,7 @@ package terminal
 import (
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
+	"log"
 	"simpleTimeTracker/pkg/controller"
 )
 
@@ -76,6 +77,11 @@ func (v *View) createMenuBarBlock() (*tview.Form, error) {
 	})
 	menuBar.AddButton("Настройки", nil)
 	menuBar.AddButton("Выход", func() {
+		err := v.controller.ShutDown()
+		if err != nil {
+			log.Println(err)
+			return
+		}
 		v.app.Stop()
 	})
 	menuBar.SetTitle("Top " + HotKeysNamed[PagesHotKeys[MenuBar]]).SetBorder(true)
