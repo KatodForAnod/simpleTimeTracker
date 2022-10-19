@@ -45,7 +45,7 @@ func (v *mainPage) createTaskStarterBlock() (*tview.Form, error) {
 
 func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
 	params := models.ReqTaskParams{
-		Start: time.Time{},
+		Start: time.Now().Add(-(time.Hour * 24 * 7)), // one week
 		Name:  "",
 		Limit: 10,
 	}
