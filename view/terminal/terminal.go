@@ -7,7 +7,8 @@ import (
 )
 
 type View struct {
-	app *tview.Application
+	app     *tview.Application
+	menuBar *tview.Form
 }
 
 func (v View) Start() error {
@@ -20,7 +21,7 @@ func (v View) Start() error {
 }
 
 func (v *View) createMainPage() (*tview.Flex, error) {
-	menuBar, _ := v.createMenuBarBlock() //fix memory use
+	menuBar, _ := v.createMenuBarBlock()
 	mainPageStruct := mainPage{createTaskTimerPage: v.createTaskTimerPageStart}
 	mainPageObj, _ := mainPageStruct.createMainPage(menuBar, v.createNewFuncInputCapture())
 	return mainPageObj, nil
@@ -47,20 +48,29 @@ func (v *View) createNewFuncInputCapture() func(page PageName, primitive tview.P
 
 func (v *View) createSearchPage() (*tview.Flex, error) {
 	searchPageObj := searchPage{}
-	menuBar, _ := v.createMenuBarBlock() //fix memory use
+	menuBar, _ := v.createMenuBarBlock()
 	page, _ := searchPageObj.createSearchPage(menuBar, v.createNewFuncInputCapture())
 	return page, nil
 }
 
 func (v *View) createMenuBarBlock() (*tview.Form, error) {
+	if v.menuBar != nil {
+		return v.menuBar, nil
+	}
 	menuBar := tview.NewForm()
+	v.menuBar = menuBar
+
 	menuBar.AddButton("Главная", func() {
+		v.app.Stop() //fix memory use
+		v.app = tview.NewApplication()
 		main_page, _ := v.createMainPage()
 		if err := v.app.SetRoot(main_page, true).Run(); err != nil {
 			log.Println(err)
 		}
 	})
 	menuBar.AddButton("Поиск", func() {
+		v.app.Stop() //fix memory use
+		v.app = tview.NewApplication()
 		search_page, _ := v.createSearchPage()
 		if err := v.app.SetRoot(search_page, true).Run(); err != nil {
 			log.Println(err)
