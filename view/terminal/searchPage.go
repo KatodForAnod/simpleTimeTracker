@@ -59,13 +59,16 @@ func (p *searchPage) initSearchBlock() error {
 				Name:  taskName.GetText(),
 				Limit: 1000,
 			}
+			const day = time.Hour * 24
+			const week = day * 7
+			const month = day * 31
 			switch text {
 			case "Day":
-				params.Start = time.Now().Add(-(time.Hour * 24))
+				params.Start = time.Now().Add(-day)
 			case "Week":
-				params.Start = time.Now().Add(-(time.Hour * 24) * 7)
+				params.Start = time.Now().Add(-week)
 			case "Month":
-				params.Start = time.Now().Add(-(time.Hour * 24) * 7 * 31)
+				params.Start = time.Now().Add(-month)
 			default:
 				return
 			}
