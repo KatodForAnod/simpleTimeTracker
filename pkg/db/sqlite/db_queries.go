@@ -1,6 +1,7 @@
 package sqlite
 
 import (
+	"fmt"
 	"log"
 	"simpleTimeTracker/pkg/models"
 )
@@ -27,12 +28,13 @@ func (l *SqlLite) SaveTask(task models.Task) (int64, error) {
 
 const searchTaskQuery = `
 	SELECT id, name, start, end
-	FROM notes WHERE start >= $1
-	ORDER BY start DESC LIMIT $2
+	FROM notes WHERE start >= $1 AND name like $2
+	ORDER BY start DESC LIMIT $3
 `
 
 func (l *SqlLite) SearchTasks(params models.ReqTaskParams) ([]models.Task, error) {
-	rows, err := l.conn.Query(searchTaskQuery, params.Start, params.Limit)
+	like := fmt.Sprintf("%s%%", params.Name)
+	rows, err := l.conn.Query(searchTaskQuery, params.Start, like, params.Limit)
 	if err != nil {
 		log.Println(err)
 		return []models.Task{}, err
