@@ -62,7 +62,8 @@ func (v *View) createNewFuncInputCapture() func(page PageName, primitive tview.P
 func (v *View) createSearchPage() (*tview.Flex, error) {
 	searchPageObj := searchPage{}
 	menuBar, _ := v.createMenuBarBlock()
-	page, _ := searchPageObj.createSearchPage(menuBar, v.createNewFuncInputCapture())
+	page, _ := searchPageObj.createSearchPage(menuBar,
+		v.createNewFuncInputCapture(), v.controller.SearchTasks)
 	return page, nil
 }
 

@@ -3,7 +3,9 @@ package terminal
 import (
 	"fmt"
 	"github.com/rivo/tview"
+	"log"
 	"simpleTimeTracker/pkg/models"
+	"time"
 )
 
 type searchPage struct {
@@ -11,17 +13,19 @@ type searchPage struct {
 	tasksBlock  *tview.List
 	amountBlock *tview.TextView
 
-	tasks    []models.Task
+	tasks       []models.Task
+	searchTasks func(params models.ReqTaskParams) ([]models.Task, error)
+
 	currPage int
 }
 
-func (p *searchPage) createSearchPage(menuBar *tview.Form, setFocus func(page PageName, primitive tview.Primitive)) (*tview.Flex, error) {
-	p.tasks = []models.Task{{Name: "task0"},
-		{Name: "task1"}, {Name: "task2"},
-		{Name: "task3"}, {Name: "task4"},
-		{Name: "task5"}, {Name: "task6"}}
+func (p *searchPage) createSearchPage(menuBar *tview.Form,
+	setFocus func(page PageName, primitive tview.Primitive),
+	searchTasks func(params models.ReqTaskParams) ([]models.Task, error)) (*tview.Flex, error) {
+	p.searchTasks = searchTasks
 
 	p.tasksBlock = tview.NewList()
+	p.tasksBlock.SetSelectedFocusOnly(true)
 	p.tasksBlock.SetTitle("Result " + HotKeysNamed[PagesHotKeys[SearchBlockResults]]).SetBorder(true)
 	_ = p.initSearchBlock()
 
@@ -51,15 +55,27 @@ func (p *searchPage) initSearchBlock() error {
 	dropdown := tview.NewDropDown().
 		SetLabel("Duration: ").
 		SetOptions([]string{"Day", "Week", "Month"}, func(text string, index int) {
+			params := models.ReqTaskParams{
+				Name:  taskName.GetText(),
+				Limit: 1000,
+			}
 			switch text {
 			case "Day":
-				p.updateTasks()
+				params.Start = time.Now().Add(-(time.Hour * 24))
 			case "Week":
-				p.updateTasks()
+				params.Start = time.Now().Add(-(time.Hour * 24) * 7)
 			case "Month":
-				p.updateTasks()
+				params.Start = time.Now().Add(-(time.Hour * 24) * 7 * 31)
 			default:
+				return
 			}
+			tasks, err := p.searchTasks(params)
+			if err != nil {
+				log.Println(err)
+				return
+			}
+			p.tasks = tasks
+			p.updateTasks()
 		})
 	p.searchBlock.AddFormItem(dropdown)
 	p.searchBlock.SetBorder(true)
@@ -70,7 +86,8 @@ func (p *searchPage) initSearchBlock() error {
 }
 
 func (p *searchPage) updateTasks() {
-	if len(p.tasks) <= p.currPage*5 {
+	const countOfTasksView = 5
+	if len(p.tasks) <= p.currPage*countOfTasksView {
 		return
 	}
 
@@ -81,14 +98,14 @@ func (p *searchPage) updateTasks() {
 			p.updateTasks()
 		})
 	}
-	for i := p.currPage * 5; i < (p.currPage+1)*5 && i < len(p.tasks); i++ {
+	for i := p.currPage * countOfTasksView; i < (p.currPage+1)*countOfTasksView && i < len(p.tasks); i++ {
 		start := p.tasks[i].Start.Format("2006-02-01")
 		end := p.tasks[i].End.Format("2006-02-01")
 		amount := "x" // temporary
 		secondaryText := fmt.Sprintf("Start: %s; End: %s, Amount: %s", start, end, amount)
 		p.tasksBlock.AddItem(p.tasks[i].Name, secondaryText, 'a', nil)
 	}
-	if (p.currPage+1)*5 < len(p.tasks) {
+	if (p.currPage+1)*countOfTasksView < len(p.tasks) {
 		p.tasksBlock.AddItem("More", "Load more ↓", 'b', func() {
 			p.currPage = p.currPage + 1
 			p.updateTasks()
