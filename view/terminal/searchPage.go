@@ -78,7 +78,8 @@ func (p *searchPage) initSearchBlock() error {
 				return
 			}
 			p.tasks = tasks
-			p.updateTasks()
+			p.initTasks()
+			_ = p.updateAmountBlock(params.Start, time.Now())
 		})
 	p.searchBlock.AddFormItem(dropdown)
 	p.searchBlock.SetBorder(true)
@@ -88,12 +89,24 @@ func (p *searchPage) initSearchBlock() error {
 	return nil
 }
 
-func (p *searchPage) updateTasks() {
-	const countOfTasksView = 5
-	if len(p.tasks) <= p.currPage*countOfTasksView {
-		return
+func (p *searchPage) updateAmountBlock(start, end time.Time) error {
+	var amount time.Duration
+	for _, task := range p.tasks {
+		amount += task.End.Sub(task.Start)
 	}
 
+	p.amountBlock.SetText(fmt.Sprintf(`From - To: %s - %s; Amount: %s`,
+		start.Format("2006-02-01"), end.Format("2006-02-01"), amount))
+	return nil
+}
+
+func (p *searchPage) initTasks() {
+	p.currPage = 0
+	p.updateTasks()
+}
+
+func (p *searchPage) updateTasks() {
+	const countOfTasksView = 8
 	p.tasksBlock.Clear()
 	if p.currPage != 0 {
 		p.tasksBlock.AddItem("Back", "Return back ↑", 'b', func() {
