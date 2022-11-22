@@ -3,13 +3,13 @@ module simpleTimeTracker
 go 1.19
 
 require (
+	github.com/gdamore/tcell/v2 v2.4.1-0.20210905002822-f057f0a857a1
 	github.com/mattn/go-sqlite3 v1.14.15
-	github.com/rivo/tview v0.0.0-20220916081518-2e69b7385a37
+	github.com/rivo/tview v0.0.0-20221117065207-09f052e6ca98
 )
 
 require (
 	github.com/gdamore/encoding v1.0.0 // indirect
-	github.com/gdamore/tcell/v2 v2.4.1-0.20210905002822-f057f0a857a1 // indirect
 	github.com/lucasb-eyer/go-colorful v1.2.0 // indirect
 	github.com/mattn/go-runewidth v0.0.13 // indirect
 	github.com/rivo/uniseg v0.4.2 // indirect
