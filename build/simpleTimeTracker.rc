@@ -28,5 +28,5 @@ FILETYPE VFT_APP
 		 VALUE "Translation", 0x0409, 1252 //language codes
 	 }
 }
-3 ICON    "tmpls/icon.ico"
+3 ICON    "icon.ico"
 110 24      "simpleTimeTracker.exe.manifest"
