@@ -29,7 +29,7 @@ func (l *SqlLite) InitDataBase() error {
 			return err
 		}
 	} else {
-		panic("error!")
+		log.Fatalln("error")
 	}
 
 	db, err := sql.Open("sqlite3", dbPath)
