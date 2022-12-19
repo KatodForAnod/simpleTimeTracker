@@ -1,5 +1,5 @@
 go env set GOOS=windows
-go env set GOARCH=i386
+go env set GOARCH=amd64
 
 rsrc.exe -manifest simpleTimeTracker.exe.manifest -o rcrs.syso
 windres -o res.syso simpleTimeTracker.rc
