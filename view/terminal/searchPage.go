@@ -115,8 +115,8 @@ func (p *searchPage) updateTasks() {
 		})
 	}
 	for i := p.currPage * countOfTasksView; i < (p.currPage+1)*countOfTasksView && i < len(p.tasks); i++ {
-		start := p.tasks[i].Start.Format("2006-02-01")
-		end := p.tasks[i].End.Format("2006-02-01")
+		start := p.tasks[i].Start.Format("2006-02-01 15:04")
+		end := p.tasks[i].End.Format("2006-02-01 15:04")
 		amount := p.tasks[i].End.Sub(p.tasks[i].Start)
 		secondaryText := fmt.Sprintf("Start: %s; End: %s, Amount: %s", start, end, amount)
 		p.tasksBlock.AddItem(p.tasks[i].Name, secondaryText, 'a', nil)

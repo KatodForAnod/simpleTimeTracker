@@ -60,8 +60,8 @@ func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
 	lastTasks.SetSelectedFocusOnly(true)
 
 	for _, task := range tasks {
-		start := task.Start.Format("2006-02-01")
-		end := task.End.Format("2006-02-01")
+		start := task.Start.Format("2006-02-01 15:04")
+		end := task.End.Format("2006-02-01 15:04")
 		amount := task.End.Sub(task.Start)
 		secondaryText := fmt.Sprintf("Start: %s; End: %s; Amount: %s", start, end, amount.String())
 		lastTasks.AddItem(task.Name, secondaryText, 'a', nil)
