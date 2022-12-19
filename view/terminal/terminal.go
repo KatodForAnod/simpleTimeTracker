@@ -91,6 +91,6 @@ func (v *View) createMenuBarBlock() (*tview.Form, error) {
 		}
 		v.app.Stop()
 	})
-	menuBar.SetTitle("Top " + HotKeysNamed[PagesHotKeys[MenuBar]]).SetBorder(true)
+	menuBar.SetTitle("Меню " + HotKeysNamed[PagesHotKeys[MenuBar]]).SetBorder(true)
 	return menuBar, nil
 }

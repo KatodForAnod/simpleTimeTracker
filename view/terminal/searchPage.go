@@ -26,7 +26,7 @@ func (p *searchPage) createSearchPage(menuBar *tview.Form,
 
 	p.tasksBlock = tview.NewList()
 	p.tasksBlock.SetSelectedFocusOnly(true)
-	p.tasksBlock.SetTitle("Result " + HotKeysNamed[PagesHotKeys[SearchBlockResults]]).SetBorder(true)
+	p.tasksBlock.SetTitle("Результат " + HotKeysNamed[PagesHotKeys[SearchBlockResults]]).SetBorder(true)
 	_ = p.initSearchBlock()
 
 	p.amountBlock = tview.NewTextView()
@@ -83,7 +83,7 @@ func (p *searchPage) initSearchBlock() error {
 		})
 	p.searchBlock.AddFormItem(dropdown)
 	p.searchBlock.SetBorder(true)
-	p.searchBlock.SetTitle("Search " + HotKeysNamed[PagesHotKeys[SearchBlockParams]])
+	p.searchBlock.SetTitle("Поиск " + HotKeysNamed[PagesHotKeys[SearchBlockParams]])
 	p.searchBlock.SetItemPadding(0)
 	p.searchBlock.SetBorderPadding(0, 0, 0, 0)
 	return nil

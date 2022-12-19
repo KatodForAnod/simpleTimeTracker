@@ -38,7 +38,7 @@ func (v *mainPage) createTaskStarterBlock() (*tview.Form, error) {
 	taskStarter.AddButton("Start", func() {
 		v.createTaskTimerPage(inputTaskField.GetText())
 	})
-	taskStarter.SetTitle("Middle " + HotKeysNamed[PagesHotKeys[TickerBlock]]).SetBorder(true)
+	taskStarter.SetTitle("Назначить задачу " + HotKeysNamed[PagesHotKeys[TickerBlock]]).SetBorder(true)
 	taskStarter.SetHorizontal(true)
 	return taskStarter, nil
 }
@@ -63,10 +63,10 @@ func (v *mainPage) createLastTasksBlock() (*tview.List, error) {
 		start := task.Start.Format("2006-02-01")
 		end := task.End.Format("2006-02-01")
 		amount := task.End.Sub(task.Start)
-		secondaryText := fmt.Sprintf("Start: %s; End: %s; Amount %s", start, end, amount.String())
+		secondaryText := fmt.Sprintf("Start: %s; End: %s; Amount: %s", start, end, amount.String())
 		lastTasks.AddItem(task.Name, secondaryText, 'a', nil)
 	}
 
-	lastTasks.SetTitle("Bottom " + HotKeysNamed[PagesHotKeys[LastTasks]]).SetBorder(true)
+	lastTasks.SetTitle("Последние задачи " + HotKeysNamed[PagesHotKeys[LastTasks]]).SetBorder(true)
 	return lastTasks, nil
 }
